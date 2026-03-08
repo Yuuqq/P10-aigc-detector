@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>P10 AIGC 文本解构：困惑度与突发性白盒探测仪</title>
+  <link rel="stylesheet" href="../shared/design-tokens.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <meta name="description" content="基于前端统计学计算文本困惑度 (Perplexity) 与突发性 (Burstiness)，分析 AI 生成特征" />
+</head>
+
+<body>
+  <main class="app">
+    <header class="hero">
+      <h1>AIGC 文本解构：算法白盒探测仪</h1>
+      <p>
+        告别黑箱！本工具尝试在浏览器本地计算文本的两个核心统计特征：
+        <strong>困惑度 (Perplexity)</strong> - 词汇使用的不可预测性，以及
+        <strong>突发性 (Burstiness)</strong> - 句子结构与长度的跳跃节奏。AI 生成的文本通常平庸且规律（低困惑度、低突发性）。
+      </p>
+    </header>
+
+    <div class="dashboard">
+      <!-- Input Section -->
+      <section class="input-panel panel">
+        <label for="textInput">待检测文本 (建议 200 - 1000 字)</label>
+        <textarea id="textInput" placeholder="在此粘贴需要分析的文章内容... 例如你可以粘贴一篇 ChatGPT 写的文章，再粘贴一篇鲁迅的文章进行对比。"></textarea>
+
+        <div class="actions">
+          <button id="detectBtn" class="btn primary">🧬 运行算法解构</button>
+          <button id="demoAIBtn" class="btn secondary">📝 载入典型 AI 文本</button>
+          <button id="demoHumanBtn" class="btn secondary">✍️ 载入人类个性文本</button>
+          <button id="clearBtn" class="btn secondary outline">🗑️ 清空</button>
+        </div>
+      </section>
+
+      <!-- Results Section -->
+      <section id="resultsPanel" class="results-panel panel hidden">
+        <div class="stats-header">
+          <div class="stat-item tooltip-container">
+            <div class="stat-label">困惑度 (Perplexity) ℹ️
+              <span class="tooltip">词汇惊喜度。AI倾向于预测概率最高的词汇，因此困惑度低；人类用词更天马行空。</span>
+            </div>
+            <div class="stat-value" id="valPerplexity">0.0</div>
+            <div class="stat-bar">
+              <div id="barPerplexity" class="fill"></div>
+            </div>
+          </div>
+
+          <div class="stat-item tooltip-container">
+            <div class="stat-label">突发性 (Burstiness) ℹ️
+              <span class="tooltip">句子长度与结构的方差。AI喜欢结构匀称的排比段落；人类往往长短句交错。</span>
+            </div>
+            <div class="stat-value" id="valBurstiness">0.0</div>
+            <div class="stat-bar">
+              <div id="barBurstiness" class="fill"></div>
+            </div>
+          </div>
+
+          <div class="stat-item highlight">
+            <div class="stat-label">AI 生成概率估算</div>
+            <div class="stat-value" id="valAILikelihood">0%</div>
+          </div>
+        </div>
+
+        <div class="analysis-visualization">
+          <h3>白盒高亮分析 (Sentence-Level Analysis)</h3>
+          <div class="legend">
+            <span class="badge aihigh">高AI特征 (句长均匀/用词平庸)</span>
+            <span class="badge aimid">中性句</span>
+            <span class="badge humanhigh">高人类特征 (长短跳跃/罕见词)</span>
+          </div>
+          <div id="textVisualization" class="text-canvas"></div>
+        </div>
+
+        <div class="scatter-container">
+          <h3>特征空间映射 (P-B 坐标系)</h3>
+          <p class="scatter-desc">AI 文本往往聚集在左下角，人类文本更倾向于向右上方延展。</p>
+          <div class="scatter-plot" id="scatterPlot">
+            <div class="axis x-axis">困惑度 (Perplexity) ➔</div>
+            <div class="axis y-axis">突发性 (Burstiness) ➔</div>
+            <div class="quadrant ai-zone">🤖 AI 高频区</div>
+            <div class="quadrant human-zone">👤 人类主产区</div>
+            <div id="scatterPoint" class="scatter-point hidden"></div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <script src="./pm-metrics.js" defer></script>
+  <script src="./app.js" defer></script>
+
+  <!-- Navigation -->
+  <nav
+    style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-size:13px;border-top:1px solid #e5e5e5;margin-top:24px;color:#666;">
+    <a href="https://yuuqq.github.io/_codex/" style="text-decoration:none;">📋 工具箱导航</a>
+    <span style="opacity:.4">P10</span>
+  </nav>
+</body>
+
+</html>
