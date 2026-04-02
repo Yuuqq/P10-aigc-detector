@@ -152,7 +152,10 @@ function visualize(text) {
 // === 事件绑定 ===
 detectBtn.addEventListener("click", () => {
   const text = textInput.value.trim();
-  if (!text) return alert("请输入需要分析的文本");
+  if (!text) {
+    document.getElementById("results").innerHTML = `<div class="p error" style="color:var(--error);padding:1rem;background:var(--card-bg);border:1px solid var(--border)">错误：请输入需要分析的文本才能进行探测。</div>`;
+    return;
+  }
   visualize(text);
 });
 
