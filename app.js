@@ -190,3 +190,15 @@ clearBtn.addEventListener("click", () => {
     }, { once: false });
   } catch (_e) { }
 })();
+
+
+// === auto-analyze on demo text load ===
+(function() {
+  setTimeout(function() {
+    var ta = document.getElementById('inputText') || document.querySelector('textarea');
+    if (ta && ta.value.trim()) {
+      var btn = document.getElementById('detectBtn') || document.querySelector('button[id*="detect"]') || document.querySelector('button[id*="analyze"]');
+      if (btn) btn.click();
+    }
+  }, 1200);
+})();
