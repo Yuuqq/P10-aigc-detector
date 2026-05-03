@@ -154,7 +154,15 @@ detectBtn.addEventListener("click", () => {
   const text = textInput.value.trim();
   if (!text) {
     resultsPanel.classList.remove("hidden");
-    resultsPanel.innerHTML = `<div class="p error" style="color:var(--error);padding:1rem;background:var(--card-bg);border:1px solid var(--border)">错误：请输入需要分析的文本才能进行探测。</div>`;
+    let errBox = document.getElementById("inputErrorMsg");
+    if (!errBox) {
+      errBox = document.createElement("div");
+      errBox.id = "inputErrorMsg";
+      errBox.className = "p error";
+      errBox.style.cssText = "color:var(--error);padding:1rem;background:var(--card-bg);border:1px solid var(--border);margin-bottom:1rem";
+      resultsPanel.insertBefore(errBox, resultsPanel.firstChild);
+    }
+    errBox.textContent = "错误：请输入需要分析的文本才能进行探测。";
     return;
   }
   visualize(text);
