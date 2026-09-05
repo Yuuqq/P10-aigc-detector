@@ -153,7 +153,10 @@ function visualize(text) {
 detectBtn.addEventListener("click", () => {
   const text = textInput.value.trim();
   if (!text) {
-    document.getElementById("results").innerHTML = `<div class="p error" style="color:var(--error);padding:1rem;background:var(--card-bg);border:1px solid var(--border)">错误：请输入需要分析的文本才能进行探测。</div>`;
+    // 错误提示写入页面实际存在的结果容器（resultsPanel 内的 textVisualization），
+    // 避免 innerHTML 覆盖 resultsPanel 本身导致其子节点被销毁
+    resultsPanel.classList.remove("hidden");
+    textVisualization.innerHTML = `<div class="p error" style="color:var(--error);padding:1rem;background:var(--card-bg);border:1px solid var(--border)">错误：请输入需要分析的文本才能进行探测。</div>`;
     return;
   }
   visualize(text);
@@ -189,16 +192,4 @@ clearBtn.addEventListener("click", () => {
       }
     }, { once: false });
   } catch (_e) { }
-})();
-
-
-// === auto-analyze on demo text load ===
-(function() {
-  setTimeout(function() {
-    var ta = document.getElementById('inputText') || document.querySelector('textarea');
-    if (ta && ta.value.trim()) {
-      var btn = document.getElementById('detectBtn') || document.querySelector('button[id*="detect"]') || document.querySelector('button[id*="analyze"]');
-      if (btn) btn.click();
-    }
-  }, 1200);
 })();
