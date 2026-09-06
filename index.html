@@ -10,6 +10,7 @@
   <meta name="color-scheme" content="light dark">
   <title>P10 AIGC 文本解构：困惑度与突发性白盒探测仪</title>
   <link rel="stylesheet" href="../shared/design-tokens.css" />
+<link rel="stylesheet" href="https://yuuqq.github.io/shared/design-tokens.css" />
   <link rel="stylesheet" href="./styles.css" />
   <meta name="description" content="基于前端统计学计算文本困惑度 (Perplexity) 与突发性 (Burstiness)，分析 AI 生成特征" />
   <link rel="manifest" href="./manifest.json" />
@@ -34,16 +35,16 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
   <a href="#main" class="skip-link">跳到主内容 / Skip to main content</a>
   <main id="main" aria-label="主内容区域" class="app">
     <header class="hero">
-      <h1>AIGC 文本解构：算法白盒探测仪</h1>
+      <h1>AIGC 文本解构：启发式探测仪（非真模型）</h1>
       <p>
-        告别黑箱！本工具尝试在浏览器本地计算文本的两个核心统计特征：
+        这是<strong>启发式</strong>演示，不是语言模型：用套话词表近似「困惑度」，用句长方差近似「突发性」。
         <strong>困惑度 (Perplexity)</strong> - 词汇使用的不可预测性，以及
         <strong>突发性 (Burstiness)</strong> - 句子结构与长度的跳跃节奏。AI 生成的文本通常平庸且规律（低困惑度、低突发性）。
       </p>
     </header>
 
     <section class="card">
-      <details class="teach-card" open>
+      <details class="teach-card">
         <summary>🎓 困惑度与突发性算法原理</summary>
         <p><strong>困惑度</strong>衡量用词的"可预测性"，AI 文本倾向于使用常见、套路化的表达，困惑度低；<strong>突发性</strong>衡量句长变化的节奏感，AI 文本句长均匀，突发性低。人类写作更丰富多变，两项指标较高。这是 NLP 领域判断文本来源的经典方法。</p>
         <p style="margin-top:8px;padding:8px;background:#fff3cd;border-radius:6px;font-size:0.9rem">⚠️ <strong>重要声明</strong>：本工具仅基于统计学特征提供参考，不能作为判定文本来源的唯一依据。检测结果可能受文本长度、领域专业度、写作风格等因素影响。请结合人工判断使用。</p>
@@ -128,7 +129,21 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
     <a href="https://yuuqq.github.io/journalism-toolbox/" style="text-decoration:none;">📋 工具箱导航</a>
     <span style="opacity:.4">P10</span>
   </nav>
-  <script src="../shared/releases/v2.6/loader.js" data-modules="dark,cmd,toast,onboarding,pedagogy-p1,pedagogy-p2,nav,kbd"></script>
+  <script>
+(function () {
+  var modules = "dark,cmd,toast,onboarding,pedagogy-p1,pedagogy-p2,nav,kbd";
+  var s = document.createElement("script");
+  s.src = "../shared/releases/v2.6/loader.js";
+  s.setAttribute("data-modules", modules);
+  s.onerror = function () {
+    var t = document.createElement("script");
+    t.src = "https://yuuqq.github.io/shared/releases/v2.6/loader.js";
+    t.setAttribute("data-modules", modules);
+    document.body.appendChild(t);
+  };
+  document.body.appendChild(s);
+})();
+</script>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}</script>
 
 </body>
