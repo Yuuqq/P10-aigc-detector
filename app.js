@@ -31,10 +31,13 @@ const DEMO_AI = `在当今时代，人工智能技术的发展可谓是日新月
 
 const DEMO_HUMAN = `昨夜落了很厚的一层雪。早上推开门，冷空气往肺里猛灌了一口，呛得我直咳嗽。街角的早餐档竟然还没开，那口大铁锅就冷冰冰地扣在炉子上，旁边还挂着半截发黄的塑料绳。我缩了缩脖子。如果没记错，老李卖包子已经有十年了，除了春节，他从不缺勤。难道是因为这场突如其来的大雪？或者是别的什么原因？我不得而知。踩在咯吱作响的雪地上，我只觉得今年的冬天，比以往都要难熬几十倍。世界白得晃眼。`;
 
+// --- 预编译正则 ---
+const PRECOMPILED_CLICHES = Array.from(CLICHE_WORDS).map(cw => new RegExp(cw, "g"));
+
 // 工具函数
 function splitSentences(text) {
-  // 按中文标点分割，保留标点
-  const regex = /([^。！？\.\!\?]+[。！？\.\!\?]?)/g;
+  // 按中文标点分割，保留标点。避免分割数字中间的小数点。
+  const regex = /(.+?(?:[。！？\!\?]|\.(?!\d)|$))/g;
   return (text.match(regex) || []).map(s => s.trim()).filter(Boolean);
 }
 
@@ -65,8 +68,7 @@ function calcPerplexity(sentences) {
   const sentencePerplexities = sentences.map(s => {
     // 粗略分词（按连续的2个以上汉字算作一个词，结合套话表验证）
     let sHits = 0;
-    CLICHE_WORDS.forEach(cw => {
-      let regex = new RegExp(cw, "g");
+    PRECOMPILED_CLICHES.forEach(regex => {
       let matches = s.match(regex);
       if (matches) sHits += matches.length;
     });
@@ -159,7 +161,7 @@ detectBtn.addEventListener("click", () => {
       errBox = document.createElement("div");
       errBox.id = "inputErrorMsg";
       errBox.className = "p error";
-      errBox.style.cssText = "color:var(--error);padding:1rem;background:var(--card-bg);border:1px solid var(--border);margin-bottom:1rem";
+      errBox.style.cssText = "color:var(--danger);padding:1rem;background:var(--card);border:1px solid var(--border);margin-bottom:1rem";
       resultsPanel.insertBefore(errBox, resultsPanel.firstChild);
     }
     errBox.textContent = "错误：请输入需要分析的文本才能进行探测。";
