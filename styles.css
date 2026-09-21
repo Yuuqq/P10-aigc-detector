@@ -1,6 +1,6 @@
 :root {
-  --bg: #f8f9fa;
-  --card: #ffffff;
+  --bg: #F0E6CF;
+  --card: #F7EFDA;
   --border: #dadce0;
   --text-main: #202124;
   --text-muted: #5f6368;
@@ -82,7 +82,7 @@ textarea {
   height: 200px;
   padding: 16px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   font-family: inherit;
   font-size: 15px;
   line-height: 1.7;
@@ -146,7 +146,7 @@ textarea {
   min-width: 150px;
   background: #f1f3f4;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 6px;
   position: relative;
 }
 
@@ -249,7 +249,7 @@ textarea {
 .text-canvas {
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 16px;
   max-height: 300px;
   overflow-y: auto;
@@ -345,8 +345,8 @@ textarea {
 
 /* === Dark Mode Override (auto-generated) === */
 :root[data-theme="dark"] {
-  --bg: #1a1a2e;
-  --card: #242438;
+  --bg: #241B11;
+  --card: #2F2618;
   --border: #3a3a50;
   --text-main: #e8e8f0;
   --text-muted: #aaa;
@@ -357,8 +357,8 @@ textarea {
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-  --bg: #1a1a2e;
-  --card: #242438;
+  --bg: #241B11;
+  --card: #2F2618;
   --border: #3a3a50;
   --text-main: #e8e8f0;
   --text-muted: #aaa;
@@ -441,7 +441,7 @@ details[open] summary { margin-bottom: 8px; }
 }
 .toast-msg {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: #333; color: #fff; padding: 10px 20px; border-radius: 8px;
+  background: #333; color: #fff; padding: 10px 20px; border-radius: 6px;
   font-size: 0.9rem; z-index: 9999; opacity: 0;
   transition: opacity 0.3s ease;
 }
