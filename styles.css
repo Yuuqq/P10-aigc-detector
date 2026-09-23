@@ -151,12 +151,15 @@ textarea {
 }
 
 .stat-item.highlight {
-  background: #e8f0fe;
-  border: 1px solid #8ab4f8;
+  background: var(--warn-light, #f3e6c8);
+  border: 1px solid var(--line, #d3c4a0);
 }
 
 .stat-item.highlight .stat-value {
-  color: #1a73e8;
+  color: var(--ink, #3a2e20);
+  font-size: 16px;
+  line-height: 1.45;
+  font-weight: 700;
 }
 
 .stat-label {

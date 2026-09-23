@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P10 AIGC 文本解构：困惑度与突发性白盒探测仪</title>
+  <title>P10 套话密度与句长起伏</title>
   <link rel="stylesheet" href="../shared/design-tokens.css" />
 <link rel="stylesheet" href="./modern-styles.css" />
 <link rel="stylesheet" href="./styles.css" />
-<meta name="description" content="基于前端统计学计算文本困惑度 (Perplexity) 与突发性 (Burstiness)，分析 AI 生成特征" />
+<meta name="description" content="用套话词表和句长变异系数做启发式观察，不输出生成概率" />
   <link rel="manifest" href="./manifest.json" />
 
   <meta property="og:title" content="P10 AIGC探测器 — 新闻素养工具箱">
@@ -28,19 +28,17 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
 <body>
   <main aria-label="主内容区域" class="app">
     <header class="hero">
-      <h1>AIGC 文本解构：算法白盒探测仪</h1>
+      <h1>套话密度与句长起伏</h1>
       <p>
-        告别黑箱！本工具尝试在浏览器本地计算文本的两个核心统计特征：
-        <strong>困惑度 (Perplexity)</strong> - 词汇使用的不可预测性，以及
-        <strong>突发性 (Burstiness)</strong> - 句子结构与长度的跳跃节奏。AI 生成的文本通常平庸且规律（低困惑度、低突发性）。
+        这里只数两件事：内置套话出现得密不密，以及句子长短差得大不大。它不是语言模型的困惑度，也不给出生成概率。
       </p>
     </header>
 
     <section class="card">
       <details class="teach-card" open>
-        <summary>🎓 困惑度与突发性算法原理</summary>
-        <p><strong>困惑度</strong>衡量用词的"可预测性"，AI 文本倾向于使用常见、套路化的表达，困惑度低；<strong>突发性</strong>衡量句长变化的节奏感，AI 文本句长均匀，突发性低。人类写作更丰富多变，两项指标较高。这是 NLP 领域判断文本来源的经典方法。</p>
-        <p style="margin-top:8px;padding:8px;background:#fff3cd;border-radius:6px;font-size:0.9rem">⚠️ <strong>重要声明</strong>：本工具仅基于统计学特征提供参考，不能作为判定文本来源的唯一依据。检测结果可能受文本长度、领域专业度、写作风格等因素影响。请结合人工判断使用。</p>
+        <summary>这个工具实际在数什么</summary>
+        <p>套话密度是一份固定词表的命中次数，除以文本长度。句长起伏是句子长度的变异系数。两样都是启发式，不含词表的文章会显示“套话密度偏低”，这不表示它是人写的。</p>
+        <p style="margin-top:8px;padding:8px;background:var(--warn-light);color:var(--ink);border-radius:6px;font-size:0.9rem">这不是检测器。结果不能当作某段文字由 AI 生成的证据。</p>
       </details>
     </section>
 
@@ -51,19 +49,19 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
         <textarea id="textInput" placeholder="在此粘贴需要分析的文章内容... 例如你可以粘贴一篇 ChatGPT 写的文章，再粘贴一篇鲁迅的文章进行对比。"></textarea>
 
         <div class="actions">
-          <button id="detectBtn" class="btn primary" aria-label="运行算法解构">🧬 运行算法解构</button>
-          <button id="demoAIBtn" class="btn secondary" aria-label="载入典型 AI 文本">📝 载入典型 AI 文本</button>
-          <button id="demoHumanBtn" class="btn secondary" aria-label="载入人类个性文本">✍️ 载入人类个性文本</button>
-          <button id="clearBtn" class="btn secondary outline" aria-label="清空文本">🗑️ 清空</button>
+          <button id="detectBtn" class="btn primary" type="button">看套话和句长</button>
+          <button id="demoAIBtn" class="btn secondary" type="button">载入套话示例</button>
+          <button id="demoHumanBtn" class="btn secondary" type="button">载入叙述示例</button>
+          <button id="clearBtn" class="btn secondary outline" type="button">清空</button>
         </div>
       </section>
 
       <!-- Results Section -->
-      <section id="resultsPanel" class="results-panel panel hidden">
+      <section id="resultsPanel" class="results-panel panel hidden" role="region" aria-live="polite" aria-label="分析结果">
         <div class="stats-header">
           <div class="stat-item tooltip-container">
-            <div class="stat-label">困惑度 (Perplexity) ℹ️
-              <span class="tooltip">词汇惊喜度。AI倾向于预测概率最高的词汇，因此困惑度低；人类用词更天马行空。</span>
+            <div class="stat-label">套话密度
+              <span class="tooltip">固定套话表的命中疏密。不是语言模型困惑度。</span>
             </div>
             <div class="stat-value" id="valPerplexity">0.0</div>
             <div class="stat-bar">
@@ -72,8 +70,8 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
           </div>
 
           <div class="stat-item tooltip-container">
-            <div class="stat-label">突发性 (Burstiness) ℹ️
-              <span class="tooltip">句子长度与结构的方差。AI喜欢结构匀称的排比段落；人类往往长短句交错。</span>
+            <div class="stat-label">句长起伏
+              <span class="tooltip">句子长度的变异系数。句数少于 3 时不给结论。</span>
             </div>
             <div class="stat-value" id="valBurstiness">0.0</div>
             <div class="stat-bar">
@@ -82,29 +80,29 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
           </div>
 
           <div class="stat-item highlight">
-            <div class="stat-label">AI 生成概率估算</div>
-            <div class="stat-value" id="valAILikelihood">0%</div>
+            <div class="stat-label">怎么读</div>
+            <div class="stat-value" id="valAILikelihood">还没分析</div>
           </div>
         </div>
 
         <div class="analysis-visualization">
           <h3>白盒高亮分析 (Sentence-Level Analysis)</h3>
           <div class="legend">
-            <span class="badge aihigh">高AI特征 (句长均匀/用词平庸)</span>
-            <span class="badge aimid">中性句</span>
-            <span class="badge humanhigh">高人类特征 (长短跳跃/罕见词)</span>
+            <span class="badge aihigh">套话且句长接近平均</span>
+            <span class="badge aimid">其余句子</span>
+            <span class="badge humanhigh">无套话且句长偏离平均</span>
           </div>
           <div id="textVisualization" class="text-canvas"></div>
         </div>
 
         <div class="scatter-container">
           <h3>特征空间映射 (P-B 坐标系)</h3>
-          <p class="scatter-desc">AI 文本往往聚集在左下角，人类文本更倾向于向右上方延展。</p>
+          <p class="scatter-desc">横轴是套话少的程度，纵轴是句长起伏。位置只帮助对照，不是分类边界。</p>
           <div class="scatter-plot" id="scatterPlot">
-            <div class="axis x-axis">困惑度 (Perplexity) ➔</div>
-            <div class="axis y-axis">突发性 (Burstiness) ➔</div>
-            <div class="quadrant ai-zone">🤖 AI 高频区</div>
-            <div class="quadrant human-zone">👤 人类主产区</div>
+            <div class="axis x-axis">套话更少 ➔</div>
+            <div class="axis y-axis">句长起伏更大 ➔</div>
+            <div class="quadrant ai-zone">套话多、句长匀</div>
+            <div class="quadrant human-zone">套话少、句长差得大</div>
             <div id="scatterPoint" class="scatter-point hidden"></div>
           </div>
         </div>
