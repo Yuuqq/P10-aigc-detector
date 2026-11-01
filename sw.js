@@ -1,23 +1,18 @@
 /**
- * 🔌 通用 Service Worker — 缓存优先策略
- * 适用于全部 50 个新闻工具项目。
- *
- * 策略：
- * 1. 安装时预缓存当前项目的核心文件
- * 2. 缓存优先 (Cache-First) 获取静态资源
- * 3. 网络优先 (Network-First) 获取 API 请求
- * 4. 离线回退页面
+ * P10 service worker. Cache-first for static files, with a network pass for documents and CSS.
  */
-const CACHE_NAME = "journalism-tool-P10-v3-parchment-sense-2-3-4-r20260922";
+const CACHE_NAME = "p10-aigc-detector-v1";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
+  "./favicon.svg",
   "./styles.css",
-  "./modern-styles.css",
   "./app.js",
   "./pm-metrics.js",
   "../shared/design-tokens.css",
+  "../shared/modern-styles.css",
+  "../shared/tool-chrome.css",
   "../shared/dark-toggle.js",
   "../shared/cmd-palette.js",
   "../shared/toast.js",

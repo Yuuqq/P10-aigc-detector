@@ -1,22 +1,17 @@
 {
-  "name": "P10 AIGC 文本解构：困惑度与突发性白盒探测仪",
+  "name": "文本风格指标观察器",
   "short_name": "P10",
-  "description": "P10 AIGC 文本解构：困惑度与突发性白盒探测仪 — 新闻素养工具",
+  "description": "用套话词表和句长变异系数做启发式观察，不输出生成概率",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f4f0e8",
-  "theme_color": "#c7491f",
+  "background_color": "#F0E6CF",
+  "theme_color": "#A2402F",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>",
+      "src": "favicon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>",
-      "sizes": "512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

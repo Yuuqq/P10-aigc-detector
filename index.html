@@ -2,48 +2,63 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P10 套话密度与句长起伏</title>
+  <meta name="theme-color" content="#F0E6CF" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#241B11" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
+  <title>P10 文本风格指标观察器</title>
   <link rel="stylesheet" href="../shared/design-tokens.css" />
-<link rel="stylesheet" href="./modern-styles.css" />
-<link rel="stylesheet" href="./styles.css" />
-<meta name="description" content="用套话词表和句长变异系数做启发式观察，不输出生成概率" />
+  <link rel="stylesheet" href="../shared/modern-styles.css" />
+  <link rel="stylesheet" href="../shared/tool-chrome.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <meta name="description" content="用套话词表和句长变异系数做启发式观察，不输出生成概率" />
   <link rel="manifest" href="./manifest.json" />
 
-  <meta property="og:title" content="P10 AIGC探测器 — 新闻素养工具箱">
-  <meta property="og:description" content="互动式新闻素养教学工具：AIGC探测器。浏览器打开即用，数据不离开本地。">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yuuqq.github.io/P10-aigc-detector/">
-    <style media="print">
-.gnav,.pedagogy-panel,.explore-section,[class*="dark-toggle"],button[aria-label]{display:none!important}
-body{background:#fff!important;color:#000!important;font-size:11pt}
-.app,main,.container{box-shadow:none!important;border:none!important;padding:0!important}
-a{color:#000!important;text-decoration:underline}
-a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
-@page{margin:2cm}
-</style>
+  <meta property="og:title" content="P10 文本风格指标观察器" />
+  <meta property="og:description" content="用套话词表和句长变异系数做启发式观察，不输出生成概率。示例只供课堂，结果不得单独当作结论。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yuuqq.github.io/P10-aigc-detector/" />
+  <style media="print">
+    .gnav, .pedagogy-panel, .explore-section, [class*="dark-toggle"], button[aria-label] { display: none !important; }
+    body {
+      background: var(--print-paper) !important;
+      color: var(--print-ink) !important;
+      font-size: 11pt;
+    }
+    .app, main, .container { box-shadow: none !important; border: none !important; padding: 0 !important; }
+    a { color: var(--print-ink) !important; text-decoration: underline; }
+    a[href]::after {
+      content: " (" attr(href) ")";
+      font-size: 9pt;
+      color: color-mix(in srgb, var(--print-ink) 68%, var(--print-paper));
+    }
+    @page { margin: 2cm; }
+  </style>
 </head>
 
 <body>
-  <main aria-label="主内容区域" class="app">
+  <main id="main" aria-label="主内容区域" class="app">
+    <header class="tool-chrome" data-tool-id="P10">
+      <a class="tool-chrome__mark" href="../P00-dashboard/">新闻实验工具</a>
+      <span class="tool-chrome__id">P10</span>
+    </header>
+
+    <details class="tool-teach">
+      <summary>如何使用</summary>
+      <p>把文章贴进输入框，或载入套话示例、叙述示例，再点「看套话和句长」。示例只供课堂对照。</p>
+      <p>套话密度是一份固定词表的命中次数，除以文本长度。句长起伏是句子长度的变异系数。两样都是启发式，不含词表的文章会显示“套话密度偏低”，这不表示它是人写的。</p>
+      <p class="tool-teach__note">这不是检测器。结果不能当作某段文字由 AI 生成的证据。</p>
+    </details>
+
     <header class="hero">
-      <h1>套话密度与句长起伏</h1>
+      <h1>文本风格指标观察器</h1>
       <p>
         这里只数两件事：内置套话出现得密不密，以及句子长短差得大不大。它不是语言模型的困惑度，也不给出生成概率。
       </p>
     </header>
 
-    <section class="card">
-      <details class="teach-card" open>
-        <summary>这个工具实际在数什么</summary>
-        <p>套话密度是一份固定词表的命中次数，除以文本长度。句长起伏是句子长度的变异系数。两样都是启发式，不含词表的文章会显示“套话密度偏低”，这不表示它是人写的。</p>
-        <p style="margin-top:8px;padding:8px;background:var(--warn-light);color:var(--ink);border-radius:6px;font-size:0.9rem">这不是检测器。结果不能当作某段文字由 AI 生成的证据。</p>
-      </details>
-    </section>
-
     <div class="dashboard">
-      <!-- Input Section -->
       <section class="input-panel panel">
         <label for="textInput">待检测文本 (建议 200 - 1000 字)</label>
         <textarea id="textInput" placeholder="在此粘贴需要分析的文章内容... 例如你可以粘贴一篇 ChatGPT 写的文章，再粘贴一篇鲁迅的文章进行对比。"></textarea>
@@ -56,7 +71,6 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
         </div>
       </section>
 
-      <!-- Results Section -->
       <section id="resultsPanel" class="results-panel panel hidden" role="region" aria-live="polite" aria-label="分析结果">
         <div class="stats-header">
           <div class="stat-item tooltip-container">
@@ -86,7 +100,7 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
         </div>
 
         <div class="analysis-visualization">
-          <h3>白盒高亮分析 (Sentence-Level Analysis)</h3>
+          <h3>白盒高亮分析</h3>
           <div class="legend">
             <span class="badge aihigh">套话且句长接近平均</span>
             <span class="badge aimid">其余句子</span>
@@ -96,11 +110,11 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
         </div>
 
         <div class="scatter-container">
-          <h3>特征空间映射 (P-B 坐标系)</h3>
+          <h3>特征空间映射</h3>
           <p class="scatter-desc">横轴是套话少的程度，纵轴是句长起伏。位置只帮助对照，不是分类边界。</p>
           <div class="scatter-plot" id="scatterPlot">
-            <div class="axis x-axis">套话更少 ➔</div>
-            <div class="axis y-axis">句长起伏更大 ➔</div>
+            <div class="axis x-axis">套话更少</div>
+            <div class="axis y-axis">句长起伏更大</div>
             <div class="quadrant ai-zone">套话多、句长匀</div>
             <div class="quadrant human-zone">套话少、句长差得大</div>
             <div id="scatterPoint" class="scatter-point hidden"></div>
@@ -109,31 +123,37 @@ a[href]::after{content:" (" attr(href) ")";font-size:9pt;color:#666}
 
       </section>
     </div>
+
+    <footer class="tool-footer">
+      数据边界以附录 A 为准：能在本机完成的计算不主动外发；示例数据仅供课堂；本工具输出不得单独当作结论。
+      <a href="../P00-dashboard/">返回工具箱</a>
+    </footer>
   </main>
   <script src="./pm-metrics.js" defer></script>
-<script src="./app.js" defer></script>
-
-  <!-- Privacy Notice -->
-  <div style="text-align:center;padding:12px 16px;font-size:12px;color:#888;border-top:1px solid #eee;margin-top:24px;">
-    🔒 隐私提示：本工具所有数据处理均在您的浏览器本地完成，不会上传任何数据至服务器。
-  </div>
-
-  <!-- Cross-Project Navigation -->
-  <nav aria-label="工具箱导航" style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-size:13px;border-top:1px solid #e5e5e5;margin-top:16px;color:#666;">
-    <a href="https://yuuqq.github.io/journalism-toolbox/" style="text-decoration:none;">📋 工具箱导航</a>
-    <span style="opacity:.4">P10</span>
-  </nav>
-
-<script src="../shared/dark-toggle.js" defer></script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}</script>
-<script src="../shared/cmd-palette.js" defer></script>
-<script src="../shared/toast.js" defer></script>
-<script src="../shared/onboarding.js" defer></script>
-<script src="../shared/pedagogy-data-p1.js" defer></script>
-<script src="../shared/pedagogy-data-p2.js" defer></script>
-<script src="../shared/global-nav.js" defer></script>
-<script src="../shared/kbd-hints.js" defer></script>
+  <script src="./app.js" defer></script>
+  <script src="../shared/dark-toggle.js" defer></script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}</script>
+  <script src="../shared/cmd-palette.js" defer></script>
+  <script src="../shared/toast.js" defer></script>
+  <script src="../shared/onboarding.js" defer></script>
+  <script src="../shared/pedagogy-data-p1.js" defer></script>
+  <script src="../shared/pedagogy-data-p2.js" defer></script>
+  <script src="../shared/global-nav.js" defer></script>
+  <script src="../shared/kbd-hints.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(function () {
+        var footer = document.querySelector(".tool-footer");
+        if (!footer) return;
+        var flow = document.querySelector(".flow-guide");
+        if (flow) {
+          flow.open = false;
+          footer.insertAdjacentElement("afterend", flow);
+        }
+        var panel = document.querySelector(".pedagogy-panel");
+        if (panel) footer.insertAdjacentElement("afterend", panel);
+      }, 0);
+    });
+  </script>
 </body>
-
 </html>
-
